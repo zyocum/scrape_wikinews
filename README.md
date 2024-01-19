@@ -54,16 +54,13 @@ You can see all categories here: [https://en.wikinews.org/wiki/Special:Categorie
 For example, to scrape all published categories (10K+ article pages):
 
 ```zsh
-(scrape_wikinews) $ ./scrape_wikinews.py --log-
-file=en-wikinews-published.log --category=Published > en-wikinews-
-published.jsonl
+(scrape_wikinews) $ ./scrape_wikinews.py --log-file=en-wikinews-published.log --category=Published > en-wikinews-published.jsonl
 ```
 
 Or to scrape just the [Health](https://en.wikinews.org/wiki/Category:Health) category:
 
 ```zsh
-(scrape_wikinews) $ ./scrape_wikinews.py
---log-file=en-wikinews-health.log --category=Health > en-wikinews-health.jsonl
+(scrape_wikinews) $ ./scrape_wikinews.py --log-file=en-wikinews-health.log --category=Health > en-wikinews-health.jsonl
 ```
 
 Since the output is in JSON lines format, you can use [`jq`](https://jqlang.github.io/jq/) and [`datamash`](https://www.gnu.org/software/datamash/) to analyze the scraped data:
