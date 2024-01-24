@@ -69,7 +69,7 @@ Since the output is in JSON lines format, you can use [`jq`](https://jqlang.gith
 (scrape_wikinews) $ jq '.text|length' en-wikinews.jsonl | datamash --header-out {min,max,mean,pstdev}\ 1 | column -t
 min(field-1)  max(field-1)  mean(field-1)    pstdev(field-1)
 1             126956        2108.0609889609  3103.367482477
-(scrape_wikinews) $ jq -r '.metadata.wikinews_categories[]|match(".*Category:(?<category>.*)")|.captures[].string' en-wikinews.jsonl.bz2 | sort | uniq -c | sort -nr | head | column -t
+(scrape_wikinews) $ jq -r '.metadata.wikinews_categories[]|match(".*Category:(?<category>.*)")|.captures[].string' en-wikinews.jsonl | sort | uniq -c | sort -nr | head | column -t
 21921  Published
 19676  Archived
 7755   Politics_and_conflicts
