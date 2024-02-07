@@ -49,7 +49,7 @@ session = requests_retry_session()
 
 def category_pages(next_page):
     """Generate Wikinews article page URLs from the category page URL.
-    
+
     next_page: A category page URL such as 'https://en.wikinews.org/wiki/Category:Published' or 'https://en.wikinews.org/wiki/Category:Health'"""
     seen = set()
     while next_page:
@@ -77,7 +77,6 @@ def metadata(article):
 
     article: requests_html.HTMLResponse
     """
-    mw_content_text = article.find('[id~="mw-content-text"]', first=True)
     mw_parser_output = article.find('[class~="mw-parser-output"]')
     try:
         title = article.find('[id="firstHeading"]', first=True).full_text.strip()
@@ -91,11 +90,11 @@ def metadata(article):
         published_date = article.find('[id="publishDate"]', first=True).attrs.get('title')
     except:
         published_date = None
-    try: 
+    try:
         licenses = [l.attrs.get('href') for l in article.find('[rel="license"]')]
     except:
         licenses = []
-    
+
     parsed_url = urlparse(article.url)
     wikinews_categories = set()
     for a in article.find('[id~="mw-normal-catlinks"] > ul > li > a'):
@@ -113,9 +112,9 @@ def metadata(article):
 
 def content(article):
     """Generate plain text content from a Wikinews article HTMLResponse
-    
+
     article: requests_html.HTMLResponse
-    
+
     e.g.:
     url = 'https://en.wikinews.org/wiki/British_supermarket_Tesco_wants_to_start_a_film_downloading_service'
     ''.join(content(session.get(url).html)) -> "The world's third largest supermarket chain, Tesco of Britain, ...
@@ -155,7 +154,7 @@ def content(article):
             yield ''
 
 def article(url):
-    """Construct a JSON object from the given Wikinews article URL"""
+    """Construct a dict object from the given Wikinews article URL that can be serialized as JSON"""
     article_page = session.get(url)
     log = logging.info if (article_page.status_code == 200) else logging.warning
     log(
@@ -208,7 +207,8 @@ if __name__ == '__main__':
             encoding='utf-8',
             level=log_level,
         )
-    logging.info(f'begin scraping category: https://en.wikinews.org/wiki/Category:{args.category}')
-    for url in category_pages(category_url):
-        if 'wikinews.org/wiki/Category:' not in url:
-            print(json.dumps(article(url), ensure_ascii=False))
+    category_url = f'https://en.wikinews.org/wiki/Category:{args.category}'
+    logging.info(f'begin scraping category: {category_url}')
+    for article_url in category_pages(category_url):
+        if 'wikinews.org/wiki/Category:' not in article_url:
+            print(json.dumps(article(article_url), ensure_ascii=False))
